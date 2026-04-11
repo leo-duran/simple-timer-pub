@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Simple timer">
+  <defs>
+    <linearGradient id="case" x1="16" y1="1" x2="16" y2="31" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2cc3ff"/>
+      <stop offset="100%" stop-color="#1e8bc4"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="30" height="30" rx="7" fill="url(#case)"/>
+  <rect x="1" y="1" width="30" height="30" rx="7" fill="none" stroke="#0b5a82" stroke-opacity="0.35" stroke-width="0.5"/>
+  <rect x="4.5" y="4.5" width="23" height="14" rx="2.2" fill="#06354a" stroke="#0b5a82" stroke-opacity="0.65" stroke-width="0.6"/>
+  <rect x="6.5" y="7.5" width="6.5" height="8" rx="1.2" fill="#dff6ff"/>
+  <circle cx="15" cy="9.5" r="1.2" fill="#dff6ff"/>
+  <circle cx="15" cy="13.5" r="1.2" fill="#dff6ff"/>
+  <rect x="19" y="7.5" width="6.5" height="8" rx="1.2" fill="#dff6ff"/>
+  <circle cx="8" cy="23.5" r="2.6" fill="#f5a6b2" stroke="#c76b7d" stroke-width="0.35"/>
+  <circle cx="16" cy="23.5" r="2.6" fill="#f5a6b2" stroke="#c76b7d" stroke-width="0.35"/>
+  <circle cx="24" cy="23.5" r="2.6" fill="#9aa5ad" stroke="#5c6a75" stroke-width="0.35"/>
+</svg>
