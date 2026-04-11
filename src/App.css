@@ -1,8 +1,14 @@
 .page {
+  min-height: 100dvh;
   min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(1.25rem, 4vw, 2rem);
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right))
+    max(1.5rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  box-sizing: border-box;
 }
 
 .timer {
@@ -62,6 +68,13 @@
   font-size: 1.35rem;
   font-weight: 700;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.08s ease;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .set {
@@ -90,8 +103,80 @@
   letter-spacing: 0.11em;
   color: #083247;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .clear:hover {
   text-decoration: underline;
+}
+
+.share {
+  width: min(450px, 100%);
+  text-align: center;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.share-heading {
+  margin: 0 0 0.75rem;
+  font-size: clamp(0.95rem, 3.2vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgb(200 220 235 / 92%);
+}
+
+.qr-frame {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 35%);
+}
+
+.qr-image {
+  display: block;
+  width: min(200px, 70vw);
+  height: auto;
+  max-width: 100%;
+}
+
+.qr-placeholder {
+  width: min(200px, 70vw);
+  aspect-ratio: 1;
+  background: linear-gradient(90deg, #e8eef2 25%, #f4f7f9 50%, #e8eef2 75%);
+  background-size: 200% 100%;
+  animation: qr-shimmer 1.2s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes qr-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.share-link {
+  display: block;
+  margin-top: 0.85rem;
+  font-size: clamp(0.65rem, 2.6vw, 0.8rem);
+  line-height: 1.45;
+  word-break: break-all;
+  color: #7eb8dc;
+  text-decoration: none;
+}
+
+.share-link:hover {
+  text-decoration: underline;
+  color: #a8d4f0;
+}
+
+@media (min-width: 480px) {
+  .page {
+    justify-content: center;
+  }
 }

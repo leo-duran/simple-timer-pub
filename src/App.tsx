@@ -1,4 +1,5 @@
-import { createEffect, createMemo, createSignal, onCleanup } from 'solid-js'
+import { createEffect, createMemo, createSignal, onCleanup, onMount, Show } from 'solid-js'
+import QRCode from 'qrcode'
 import './App.css'
 
 function App() {
@@ -106,6 +107,19 @@ function App() {
     () => `${minutes().toString().padStart(2, '0')}${seconds().toString().padStart(2, '0')}`,
   )
 
+  const shareUrl = () => new URL(import.meta.env.BASE_URL || '/', window.location.origin).href
+
+  const [qrDataUrl, setQrDataUrl] = createSignal('')
+
+  onMount(() => {
+    void QRCode.toDataURL(shareUrl(), {
+      width: 200,
+      margin: 2,
+      color: { dark: '#0f1419', light: '#ffffff' },
+      errorCorrectionLevel: 'M',
+    }).then(setQrDataUrl)
+  })
+
   return (
     <main class="page">
       <section class="timer" aria-label="Simple timer">
@@ -145,6 +159,27 @@ function App() {
         <button type="button" class="clear" onClick={clearTimer}>
           CLEAR
         </button>
+      </section>
+
+      <section class="share" aria-label="Open this app elsewhere">
+        <h2 class="share-heading">Open on another device</h2>
+        <div class="qr-frame">
+          <Show
+            when={qrDataUrl()}
+            fallback={<div class="qr-placeholder" aria-hidden="true" />}
+          >
+            <img
+              class="qr-image"
+              src={qrDataUrl()}
+              width={200}
+              height={200}
+              alt="QR code linking to this timer app"
+            />
+          </Show>
+        </div>
+        <a class="share-link" href={shareUrl()} rel="noopener noreferrer">
+          {shareUrl()}
+        </a>
       </section>
     </main>
   )
