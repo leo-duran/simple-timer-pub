@@ -2,7 +2,18 @@ import { defineConfig } from 'vite'
 import solid from 'vite-plugin-solid'
 import { VitePWA } from 'vite-plugin-pwa'
 
+/** Base URL for GitHub Pages project sites: /<repo>/ ; use '/' for user/org root site. */
+function appBase(): string {
+  const raw = process.env.VITE_BASE_PATH?.trim()
+  if (!raw || raw === '/') return '/'
+  const inner = raw.replace(/^\/+|\/+$/g, '')
+  return `/${inner}/`
+}
+
+const base = appBase()
+
 export default defineConfig({
+  base,
   plugins: [
     solid(),
     VitePWA({
@@ -16,8 +27,8 @@ export default defineConfig({
         background_color: '#f7f3ea',
         display: 'standalone',
         orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
+        scope: base,
+        start_url: base,
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -41,7 +52,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        navigateFallback: '/index.html',
+        navigateFallback: base === '/' ? '/index.html' : `${base}index.html`,
       },
     }),
   ],
