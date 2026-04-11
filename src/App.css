@@ -123,6 +123,8 @@
 .button.action.alarming {
   background: radial-gradient(circle at 35% 35%, #ff9090 0%, #e04040 80%);
   color: #fff;
+}
+
 .share {
   width: min(450px, 100%);
   text-align: center;
