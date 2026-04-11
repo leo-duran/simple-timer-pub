@@ -24,7 +24,7 @@ export default defineConfig({
         short_name: 'Timer',
         description: 'A simple MM:SS countdown timer',
         theme_color: '#2ba8f5',
-        background_color: '#f7f3ea',
+        background_color: '#0b0f14',
         display: 'standalone',
         orientation: 'portrait',
         scope: base,
