@@ -6,8 +6,10 @@ function App() {
   const [secondsLeft, setSecondsLeft] = createSignal(0)
   const [isRunning, setIsRunning] = createSignal(false)
   const [startSeconds, setStartSeconds] = createSignal(0)
+  const [isAlarming, setIsAlarming] = createSignal(false)
 
   let intervalId: number | undefined
+  let alarmIntervalId: number | undefined
   let audioContext: AudioContext | undefined
 
   const playCompletionTone = () => {
@@ -45,16 +47,19 @@ function App() {
   }
 
   const addMinute = () => {
+    if (isAlarming()) { dismissAlarm(); return }
     if (isRunning()) return
     setSecondsLeft((value) => Math.min(value + 60, 99 * 60 + 59))
   }
 
   const addSecond = () => {
+    if (isAlarming()) { dismissAlarm(); return }
     if (isRunning()) return
     setSecondsLeft((value) => Math.min(value + 1, 99 * 60 + 59))
   }
 
   const toggleStartStop = () => {
+    if (isAlarming()) { dismissAlarm(); return }
     if (!isRunning() && secondsLeft() === 0) return
     if (!isRunning()) {
       setStartSeconds(secondsLeft())
@@ -63,9 +68,14 @@ function App() {
   }
 
   const clearTimer = () => {
+    if (isAlarming()) { dismissAlarm(); return }
     setIsRunning(false)
     setSecondsLeft(0)
     setStartSeconds(0)
+  }
+
+  const dismissAlarm = () => {
+    setIsAlarming(false)
   }
 
   createEffect(() => {
@@ -81,6 +91,7 @@ function App() {
       setSecondsLeft((value) => {
         if (value <= 1) {
           setIsRunning(false)
+          setIsAlarming(true)
           playCompletionTone()
           return startSeconds()
         }
@@ -88,6 +99,21 @@ function App() {
         return value - 1
       })
     }, 1000)
+  })
+
+  createEffect(() => {
+    if (!isAlarming()) return
+
+    alarmIntervalId = window.setInterval(() => {
+      playCompletionTone()
+    }, 2000)
+
+    onCleanup(() => {
+      if (alarmIntervalId !== undefined) {
+        window.clearInterval(alarmIntervalId)
+        alarmIntervalId = undefined
+      }
+    })
   })
 
   onCleanup(() => {
@@ -123,7 +149,7 @@ function App() {
   return (
     <main class="page">
       <section class="timer" aria-label="Simple timer">
-        <div class="display-shell">
+        <div class={`display-shell${isAlarming() ? ' alarming' : ''}`}>
           <div class="digits" aria-live="polite">
             {displayDigits()}
           </div>
@@ -136,23 +162,23 @@ function App() {
         <div class="labels">
           <span>MIN</span>
           <span>SEC</span>
-          <span>START/STOP</span>
+          <span>{isAlarming() ? 'DISMISS' : 'START/STOP'}</span>
         </div>
 
         <div class="buttons">
-          <button type="button" class="button set" onClick={addMinute} disabled={isRunning()}>
+          <button type="button" class="button set" onClick={addMinute} disabled={isRunning() && !isAlarming()}>
             M
           </button>
-          <button type="button" class="button set" onClick={addSecond} disabled={isRunning()}>
+          <button type="button" class="button set" onClick={addSecond} disabled={isRunning() && !isAlarming()}>
             S
           </button>
           <button
             type="button"
-            class="button action"
+            class={`button action${isAlarming() ? ' alarming' : ''}`}
             onClick={toggleStartStop}
-            disabled={!isRunning() && secondsLeft() === 0}
+            disabled={!isAlarming() && !isRunning() && secondsLeft() === 0}
           >
-            {isRunning() ? 'STOP' : 'START'}
+            {isAlarming() ? 'DISMISS' : isRunning() ? 'STOP' : 'START'}
           </button>
         </div>
 

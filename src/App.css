@@ -179,4 +179,16 @@
   .page {
     justify-content: center;
   }
+@keyframes alarm-flash {
+  0%, 100% { background: #e6e6e6; border-color: #a1a1a1; }
+  50% { background: #ffd0d6; border-color: #f5a6b2; }
+}
+
+.display-shell.alarming {
+  animation: alarm-flash 1s ease-in-out infinite;
+}
+
+.button.action.alarming {
+  background: radial-gradient(circle at 35% 35%, #ff9090 0%, #e04040 80%);
+  color: #fff;
 }
