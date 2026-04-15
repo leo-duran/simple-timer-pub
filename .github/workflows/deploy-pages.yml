@@ -50,3 +50,25 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  sync-pub:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push main to pub
+        env:
+          PUB_REPO: leo-duran/simple-timer-pub
+          PUB_PUSH_TOKEN: ${{ secrets.PUB_PUSH_TOKEN }}
+        run: |
+          if [ -z "$PUB_PUSH_TOKEN" ]; then
+            echo "PUB_PUSH_TOKEN secret is not configured."
+            exit 1
+          fi
+
+          git remote add pub "https://x-access-token:${PUB_PUSH_TOKEN}@github.com/${PUB_REPO}.git"
+          git push pub HEAD:main
