@@ -76,6 +76,9 @@ function App() {
 
   const dismissAlarm = () => {
     setIsAlarming(false)
+    if (secondsLeft() === 0 && startSeconds() > 0) {
+      setSecondsLeft(startSeconds())
+    }
   }
 
   createEffect(() => {
@@ -93,7 +96,7 @@ function App() {
           setIsRunning(false)
           setIsAlarming(true)
           playCompletionTone()
-          return startSeconds()
+          return 0
         }
 
         return value - 1
@@ -130,7 +133,7 @@ function App() {
   const minutes = createMemo(() => Math.floor(secondsLeft() / 60))
   const seconds = createMemo(() => secondsLeft() % 60)
   const displayDigits = createMemo(
-    () => `${minutes().toString().padStart(2, '0')}${seconds().toString().padStart(2, '0')}`,
+    () => `${minutes().toString().padStart(2, '0')}:${seconds().toString().padStart(2, '0')}`,
   )
 
   const shareUrl = () => new URL(import.meta.env.BASE_URL || '/', window.location.origin).href
