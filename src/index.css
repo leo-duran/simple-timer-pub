@@ -6,6 +6,8 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
+  background-color: #0b0f14;
 }
 
 body {
@@ -22,6 +24,7 @@ body {
   color: #e8eef4;
   min-height: 100dvh;
   min-height: 100vh;
+  overscroll-behavior-y: none;
 }
 
 #root {

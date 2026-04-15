@@ -27,6 +27,9 @@ jobs:
           cache: npm
 
       - name: Install dependencies and build
+        env:
+          # Project Pages site => /<repo>/ ; user/org site => /
+          VITE_BASE_PATH: ${{ github.event.repository.name == format('{0}.github.io', github.repository_owner) && '/' || format('/{0}/', github.event.repository.name) }}
         run: |
           npm ci
           npm run build
