@@ -31,6 +31,12 @@ jobs:
           npm ci
           npm run build
 
+      - name: Upload Pages artifact
+        if: github.repository == 'leo-duran/simple-timer-pub' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
   sync-pub:
     needs: build
     if: github.repository == 'leo-duran/simple-timer' && github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -56,18 +62,8 @@ jobs:
           git remote add pub "https://x-access-token:${PUB_PUSH_TOKEN}@github.com/${PUB_REPO}.git"
           git push pub HEAD:main
 
-  publish-pages-artifact:
-    needs: build
-    if: github.repository == 'leo-duran/simple-timer-pub' && github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
   deploy-pages:
-    needs: publish-pages-artifact
+    needs: build
     if: github.repository == 'leo-duran/simple-timer-pub' && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
